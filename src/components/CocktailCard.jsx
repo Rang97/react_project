@@ -51,9 +51,9 @@ export default function CocktailCard({ data, isBookmarked, onToggleBookmark }) {
         </div>
 
         {/* 하단 정보 */}
-        <div className="absolute font-semibold inset-x-0 bottom-0 z-10 p-5 bg-stone-100">
-          <div className="flex justify-between border-b ">
-            <h1 className="font-merri w-full text-3xl text-stone-900 pb-4 tracking-wide">
+        <div className="absolute font-semibold inset-x-0 bottom-0 z-10 p-5 bg-stone-100 dark:bg-stone-900">
+          <div className="flex justify-between border-b dark:border-b-stone-200">
+            <h1 className="font-merri w-full text-3xl text-stone-900 pb-4 tracking-wide dark:text-stone-200">
               {data.strDrink}
             </h1>
 
@@ -63,7 +63,7 @@ export default function CocktailCard({ data, isBookmarked, onToggleBookmark }) {
                 e.stopPropagation();
                 onToggleBookmark(data);
               }}
-              className="h-9 transition-all cursor-pointer px-2"
+              className="h-9 transition-all cursor-pointe"
             >
               {isBookmarked ? (
                 <img src={on} className="w-6" />
@@ -73,7 +73,7 @@ export default function CocktailCard({ data, isBookmarked, onToggleBookmark }) {
             </button>
           </div>
 
-          <p className="font-outfit w-50 text-stone-500 pt-5 text-sm uppercase tracking-wider">
+          <p className="font-outfit w-50 text-stone-500 pt-5 text-sm uppercase tracking-wider0">
             {data.strCategory}
           </p>
         </div>
@@ -97,7 +97,7 @@ export default function CocktailCard({ data, isBookmarked, onToggleBookmark }) {
             </button>
           </div>
 
-          {/* 📋 재료 목록 구역 */}
+          {/* 재료 목록 구역 */}
           <div className="container mb-6 ">
             <h3 className="font-outfit text-[15px] font-bold text-stone-300 uppercase tracking-widest mb-3">
               Ingredients
@@ -111,7 +111,7 @@ export default function CocktailCard({ data, isBookmarked, onToggleBookmark }) {
             </ul>
           </div>
 
-          {/* 📝 제조 방법 구역 */}
+          {/* 제조 방법 구역 */}
           <div>
             <p className="font-merri text-stone-300 text-[17px] leading-relaxed pt-7 border-t-1">
               {data.strInstructions || "Mix gently and enjoy."}

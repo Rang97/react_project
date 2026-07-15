@@ -1,6 +1,6 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 
 import CocktailCard from "./components/CocktailCard";
@@ -52,6 +52,15 @@ function App() {
 
   //화면 모드 상태 all and my bar
   const [viewMode, setViewMode] = useState("all");
+
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem("cocktail-theme");
+    return saved === "dark";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cocktail-theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
 
   const [bookmarks, setBookmarks] = useState(() => {
     const saved = localStorage.getItem("my-cocktail-bar");
@@ -138,106 +147,113 @@ function App() {
       : infiniteQuery.isError;
 
   return (
-    <div className="bg-stone-300  min-h-screen pb-10">
-      <div className="container max-w-6xl mx-auto px-4">
-        <Nav
-          selectedIngredient={selectedIngredient}
-          viewMode={viewMode}
-          onViewModeChange={(mode) => {
-            setViewMode(mode);
-            if (mode === "mybar") {
-              setSearchKeyword("");
+    <div className={isDarkMode ? "dark" : ""}>
+      <div className="bg-stone-300  min-h-screen pb-10 dark:bg-stone-800">
+        <div className="container max-w-6xl mx-auto px-4">
+          <Nav
+            selectedIngredient={selectedIngredient}
+            viewMode={viewMode}
+            onViewModeChange={(mode) => {
+              setViewMode(mode);
+              if (mode === "mybar") {
+                setSearchKeyword("");
+                setSelectedIngredient("");
+              }
+            }}
+            onSearch={(word) => {
+              setSearchKeyword(word);
               setSelectedIngredient("");
-            }
-          }}
-          onSearch={(word) => {
-            setSearchKeyword(word);
-            setSelectedIngredient("");
-            setViewMode("all");
-          }}
-          onFilter={(ingredient) => {
-            setSelectedIngredient(ingredient);
-            setSearchKeyword("");
-            setViewMode("all");
-          }}
-          ingredientsList={ingredientQuery.data || []}
-        />
+              setViewMode("all");
+            }}
+            onFilter={(ingredient) => {
+              setSelectedIngredient(ingredient);
+              setSearchKeyword("");
+              setViewMode("all");
+            }}
+            ingredientsList={ingredientQuery.data || []}
+            isDarkMode={isDarkMode}
+            setIsDarkMode={setIsDarkMode}
+          />
 
-        <div
-          className={`${viewMode == "ingredients" ? "" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto mt-10"}`}
-        >
-          {viewMode === "ingredients" ? (
-            <IngredientsPage />
-          ) : viewMode === "mybar" ? (
-            // 찜 목록
-            bookmarks.length > 0 ? (
-              bookmarks.map((cocktail) => (
+          <div
+            className={`${viewMode == "ingredients" ? "" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto mt-10"}`}
+          >
+            {viewMode === "ingredients" ? (
+              <IngredientsPage />
+            ) : viewMode === "mybar" ? (
+              // 찜 목록
+              bookmarks.length > 0 ? (
+                bookmarks.map((cocktail) => (
+                  <CocktailCard
+                    key={cocktail.idDrink}
+                    data={cocktail}
+                    isBookmarked={true}
+                    onToggleBookmark={handleToggleBookmark}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-20 text-stone-500 font-bold font-merri">
+                  진열장에 보관한 칵테일이 없습니다.
+                </div>
+              )
+            ) : searchKeyword ? (
+              // 검색 결과
+              searchQuery.data?.map((cocktail) => (
                 <CocktailCard
                   key={cocktail.idDrink}
                   data={cocktail}
-                  isBookmarked={true}
+                  isBookmarked={bookmarks.some(
+                    (b) => b.idDrink === cocktail.idDrink,
+                  )}
+                  onToggleBookmark={handleToggleBookmark}
+                />
+              ))
+            ) : selectedIngredient ? (
+              // 재료
+              filterQuery.data?.map((cocktail) => (
+                <CocktailCard
+                  key={cocktail.idDrink}
+                  data={cocktail}
+                  isBookmarked={bookmarks.some(
+                    (b) => b.idDrink === cocktail.idDrink,
+                  )}
                   onToggleBookmark={handleToggleBookmark}
                 />
               ))
             ) : (
-              <div className="col-span-full text-center py-20 text-stone-500 font-bold font-merri">
-                진열장에 보관한 칵테일이 없습니다.
-              </div>
-            )
-          ) : searchKeyword ? (
-            // 검색 결과
-            searchQuery.data?.map((cocktail) => (
-              <CocktailCard
-                key={cocktail.idDrink}
-                data={cocktail}
-                isBookmarked={bookmarks.some(
-                  (b) => b.idDrink === cocktail.idDrink,
-                )}
-                onToggleBookmark={handleToggleBookmark}
-              />
-            ))
-          ) : selectedIngredient ? (
-            // 재료
-            filterQuery.data?.map((cocktail) => (
-              <CocktailCard
-                key={cocktail.idDrink}
-                data={cocktail}
-                isBookmarked={bookmarks.some(
-                  (b) => b.idDrink === cocktail.idDrink,
-                )}
-                onToggleBookmark={handleToggleBookmark}
-              />
-            ))
-          ) : (
-            // 무한 스크롤
-            infiniteQuery.data?.pages.map((page) =>
-              page.drinks
-                .slice(0, 12)
-                .map((cocktail) => (
-                  <CocktailCard
-                    key={cocktail.idDrink}
-                    data={cocktail}
-                    isBookmarked={bookmarks.some(
-                      (b) => b.idDrink === cocktail.idDrink,
-                    )}
-                    onToggleBookmark={handleToggleBookmark}
-                  />
-                )),
-            )
-          )}
+              // 무한 스크롤
+              infiniteQuery.data?.pages.map((page) =>
+                page.drinks
+                  .slice(0, 12)
+                  .map((cocktail) => (
+                    <CocktailCard
+                      key={cocktail.idDrink}
+                      data={cocktail}
+                      isBookmarked={bookmarks.some(
+                        (b) => b.idDrink === cocktail.idDrink,
+                      )}
+                      onToggleBookmark={handleToggleBookmark}
+                    />
+                  )),
+              )
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* 바닥 트리거 */}
-      {!searchKeyword && (
-        <div ref={ref} className="h-24 flex justify-center items-center mt-10">
-          {infiniteQuery.isFetchingNextPage && (
-            <p className="font-merri text-stone-500 font-semibold animate-pulse">
-              칵테일 제조 중 . . .
-            </p>
-          )}
-        </div>
-      )}
+        {/* 바닥 트리거 */}
+        {!searchKeyword && (
+          <div
+            ref={ref}
+            className="h-24 flex justify-center items-center mt-10"
+          >
+            {infiniteQuery.isFetchingNextPage && (
+              <p className="font-merri text-stone-500 font-semibold animate-pulse">
+                칵테일 제조 중 . . .
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

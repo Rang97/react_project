@@ -59,7 +59,7 @@ export default function IngredientsPage() {
   return (
     <div className="py-8">
       <div className="mb-10 text-left">
-        <h2 className="font-merri text-5xl font-bold mb-2 text-stone-900">
+        <h2 className="font-merri text-5xl font-bold mb-2 text-stone-900 dark:text-stone-300">
           THE BASE
         </h2>
       </div>
@@ -75,7 +75,7 @@ export default function IngredientsPage() {
             <div
               key={idx}
               onClick={() => setSelectedIngredient(name)}
-              className="bg-stone-100 p-8 flex flex-col items-center justify-between cursor-pointer transform hover:transition-all group"
+              className="bg-stone-100 dark:bg-stone-900 p-8 flex flex-col items-center justify-between cursor-pointer transform hover:transition-all group"
             >
               <div className="w-50 flex items-center justify-center mb-8">
                 <img
@@ -84,7 +84,7 @@ export default function IngredientsPage() {
                   className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform"
                 />
               </div>
-              <span className="w-full font-merri text-xl text-center font-bold text-stone-800 border-t-1 pt-5">
+              <span className="w-full font-merri text-xl text-center font-bold text-stone-800 border-t-1 pt-5 dark:text-stone-200">
                 {name}
               </span>
             </div>
@@ -94,12 +94,12 @@ export default function IngredientsPage() {
 
       {/* 🌜 스르륵 열리는 재료 디테일 서랍 레이어 (모달) */}
       {selectedIngredient && (
-        <div className="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex justify-center transition-all duration-500">
-          <div className="w-full max-w-xl bg-stone-100  h-full p-8 flex flex-col justify-between overflow-y-auto">
+        <div className="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex justify-center transition-all duration-500 ">
+          <div className="w-full max-w-xl bg-stone-100 dark:bg-stone-800  h-full p-8 flex flex-col justify-between overflow-y-auto">
             <div>
               {/* 헤더 */}
-              <div className="flex justify-between items-center mb-6 pb-4 border-b ">
-                <span className="font-outfit text-xl text-stone-800 uppercase tracking-widest font-bold">
+              <div className="flex justify-between items-center mb-6 pb-4 border-b dark:border-b-stone-300">
+                <span className="font-outfit text-xl text-stone-800 dark:text-stone-300 uppercase tracking-widest 0font-bold">
                   base detail
                 </span>
                 <button
@@ -118,7 +118,7 @@ export default function IngredientsPage() {
                   className="object-contain"
                 />
                 <div>
-                  <h3 className="font-merri text-3xl font-bold text-stone-900">
+                  <h3 className="font-merri text-3xl font-bold text-stone-900 dark:text-stone-200">
                     {selectedIngredient}
                   </h3>
                 </div>
@@ -126,7 +126,7 @@ export default function IngredientsPage() {
 
               {/* 매칭 칵테일들 */}
               <div>
-                <h4 className="font-outfit text-ms text-stone-800 uppercase tracking-widest mb-6">
+                <h4 className="font-outfit text-ms text-stone-800 dark:text-stone-300 uppercase tracking-widest mb-6">
                   Cocktails with {selectedIngredient}
                 </h4>
                 {relatedCocktails.length > 0 ? (
@@ -134,14 +134,14 @@ export default function IngredientsPage() {
                     {relatedCocktails.map((cocktail, i) => (
                       <div
                         key={i}
-                        className="bg-white flex flex-col items-center text-center"
+                        className="bg-stone-100 dark:bg-stone-900 flex flex-col items-center text-center"
                       >
                         <img
                           src={cocktail.strDrinkThumb}
                           alt={cocktail.strDrink}
                           className="w-full object-cover"
                         />
-                        <span className="font-outfit text- text-stone-800 line-clamp-1 py-5">
+                        <span className="font-outfit text- text-stone-800 dark:text-stone-200 line-clamp-1 py-5">
                           {cocktail.strDrink}
                         </span>
                       </div>

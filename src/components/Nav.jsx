@@ -4,6 +4,8 @@ import search from "../assets/search.png";
 import plus from "../assets/plus.png";
 import bg_1 from "../assets/bg_1.png";
 import bg_2 from "../assets/bg_2.png";
+import moon from "../assets/moon.png";
+import sun from "../assets/sun.png";
 
 function Nav({
   onSearch,
@@ -23,31 +25,43 @@ function Nav({
 
   return (
     <nav>
-      <div className="font-outfit text-xl flex w-full gap-10 bg-stone-900 text-stone-100 py-5 px-8 ">
-        <button
-          onClick={() => onViewModeChange("all")}
-          className="hover:text-stone-500 transition-colors"
-        >
-          LOUNGE
-        </button>
+      <div className="flex w-full font-outfit text-xl bg-stone-900 text-stone-100 py-5 px-8">
+        <div className="w-full flex gap-10">
+          {" "}
+          <button
+            onClick={() => onViewModeChange("all")}
+            className="hover:text-stone-500 transition-colors"
+          >
+            LOUNGE
+          </button>
+          <button
+            onClick={() => onViewModeChange("ingredients")}
+            className="hover:text-stone-500 transition-colors"
+          >
+            BASE
+          </button>
+          <button
+            onClick={() => onViewModeChange("mybar")}
+            className="hover:text-stone-500 transition-colors"
+          >
+            MY BAR
+          </button>
+        </div>
 
         <button
-          onClick={() => onViewModeChange("ingredients")}
-          className="hover:text-stone-500 transition-colors"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="p-3 bg-stone-300 dark:bg-stone-950 hover:bg-stone-300 dark:hover:bg-stone-800 text-lg rounded-full transition-all active:scale-95 shadow-sm "
         >
-          BASE
-        </button>
-
-        <button
-          onClick={() => onViewModeChange("mybar")}
-          className="hover:text-stone-500 transition-colors"
-        >
-          MY BAR
+          {isDarkMode ? (
+            <img src={sun} className="w-6" />
+          ) : (
+            <img src={moon} className="w-6" />
+          )}
         </button>
       </div>
 
       <div className="relative">
-        <h1 className=" relative z-10 font-merri text-9xl pl-5 py-25 text-stone-900">
+        <h1 className=" relative z-10 font-merri text-9xl pl-5 py-25 text-stone-900 dark:text-stone-300">
           Cocktail <br /> for everyone
         </h1>
         <img
@@ -58,7 +72,7 @@ function Nav({
       </div>
 
       {/* 검색창 */}
-      <div className="flex w-full ml-auto justify-end border-b border-t py-6">
+      <div className="flex w-full ml-auto justify-end border-b border-t py-6 dark:border-stone-500">
         <form
           onSubmit={handleSubmit}
           className="flex items-right justify-end max-w-8xl mr-5"
@@ -68,11 +82,11 @@ function Nav({
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="칵테일 찾기"
-            className="font-outfit w-full sm:w-72 px-5 border border-stone-900 text-stone-900 text-ms focus:outline-none focus:bg-stone-300 transition-colors placeholder:text-stone-500"
+            className="font-outfit w-full sm:w-72 px-5 border border-stone-900 text-stone-900 text-ms focus:outline-none focus:bg-stone-300 transition-colors placeholder:text-stone-500 dark:bg-stone-500 dark:placeholder:text-stone-300"
           />
           <button
             type="submit"
-            className="font-outfit px-4 py-4 border border-stone-900 bg-stone-900 hover:bg-stone-800 active:scale-95 text-stone-50 text-base"
+            className="font-outfit px-4 py-4 border border-stone-900 bg-stone-900 hover:bg-stone-800 active:scale-95 text-stone-50 text-base dark:bg-stone-700"
           >
             <img src={search} className="w-6" />
           </button>
@@ -85,7 +99,7 @@ function Nav({
             onFilter(e.target.value);
             setKeyword("");
           }}
-          className="font-outfit px-5 py-2  bg-stone-900 text-stone-50 border border-stone-900 text-base focus:outline-none cursor-pointer    "
+          className="font-outfit px-5 py-2  bg-stone-900 text-stone-50 border border-stone-900 text-base focus:outline-none cursor-pointer dark:bg-stone-700  "
         >
           <option value="">전체 보기 ALL</option>
           <option value="Vodka">보드카 VODKA</option>
