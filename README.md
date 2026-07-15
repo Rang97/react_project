@@ -1,16 +1,46 @@
-# React + Vite
+# Cocktail
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TheCocktailDB API를 활용한 칵테일 탐색 React 앱
 
-Currently, two official plugins are available:
+## 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 칵테일 검색
+- 재료 기반 필터링
+- 무한 스크롤로 칵테일 목록 탐색
+- 북마크(마이바) 기능
+- 기본적인 네비게이션 및 뷰 전환
 
-## React Compiler
+## 사용 기술
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Vite
+- TanStack React Query
+- Axios
+- Tailwind CSS
+- react-intersection-observer
 
-## Expanding the ESLint configuration
+## 실행 방법
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. 의존성 설치
+   ```bash
+   npm install
+   ```
+2. 개발 서버 실행
+   ```bash
+   npm run dev
+   ```
+3. 브라우저에서 아래 주소로 접속
+   ```text
+   http://localhost:5173
+   ```
+
+## 빌드
+
+```bash
+npm run build
+```
+
+## 참고
+
+- 칵테일 데이터는 TheCocktailDB API를 사용
+- 북마크 정보는 브라우저의 localStorage에 저장
